@@ -1,0 +1,23 @@
+create or replace function "COUNTER"(
+    C_id in number )
+return number
+as
+i_count number;
+begin
+    select sum(count_) into i_count from basket where cl_id = c_id;
+    return i_count;
+end "COUNTER";
+/
+
+create or replace function "GET_CARD_SUM" (
+    C_id in number )
+return number
+as
+    cu number;
+    c_sum number;
+begin
+    select card into cu from customer where id = C_id and rownum = 1;
+    select summ into c_sum from cards  where card_id = cu;
+    return c_sum;
+end "GET_CARD_SUM";
+/

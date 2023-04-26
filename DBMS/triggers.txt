@@ -1,0 +1,82 @@
+create or replace TRIGGER ADDRESSES_row_count
+BEFORE DELETE OR INSERT OR UPDATE ON ADDRESSES
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from ADDRESSES;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/
+create or replace TRIGGER add_shipp
+AFTER INSERT ON order_
+FOR EACH ROW 
+DECLARE
+  c_id number;
+  sum_ number;
+BEGIN 
+  insert into SHIPPING values((select count(*)+1 from SHIPPING),'Delivery',(select ADDRESS from customer where id = :new.cl_id),(SELECT round (DBMS_RANDOM.VALUE(1, 100)) AS random_number FROM dual),:new.order_id );
+  select card into c_id from customer where id = :new.cl_id and rownum = 1;
+  update cards set summ = summ - :new.amount where card_id = c_id;
+  delete from basket where cl_id = :new.cl_id;
+END;
+/
+create or replace TRIGGER BASKET_row_count
+BEFORE DELETE OR INSERT OR UPDATE ON ADDRESSES
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from BASKET;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/
+create or replace TRIGGER CARDS_row_count
+BEFORE INSERT  ON CARDS
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from CARDS;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/
+create or replace TRIGGER customer_row_count
+BEFORE DELETE OR INSERT OR UPDATE ON customer
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from customer;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/create or replace TRIGGER item_row_count
+BEFORE DELETE OR INSERT  ON item
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from item;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/
+create or replace TRIGGER order_row_count
+BEFORE   INSERT  ON order_
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from order_;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/
+create or replace TRIGGER REVIEWS_row_count
+BEFORE DELETE OR INSERT OR UPDATE ON REVIEWS
+FOR EACH ROW 
+declare
+   row_c number; 
+BEGIN 
+   select count(*) into row_c from REVIEWS;
+   dbms_output.put_line('Row count : ' || row_c);  
+END;
+/

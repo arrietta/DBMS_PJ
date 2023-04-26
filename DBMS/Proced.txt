@@ -1,0 +1,81 @@
+create or replace procedure "ADD_ADDRESS" (
+    co      in     varchar2,
+    ci        in     varchar2,
+    st        in     varchar2,
+    h in     varchar2 )
+as
+begin
+    insert into addresses values ((select count (*)from addresses),co,ci,st,h) ;
+end "ADD_ADDRESS";
+/
+create or replace PROCEDURE add_basket(item_id IN number, c_id IN number) as 
+c_ number;
+BEGIN 
+    select count(*) into c_ from basket where cl_id = c_id and it_id = item_id;
+    if(c_>0) then
+    update basket set count_ = count_+1 , summ = summ + (select price from item where i_id = item_id )  where cl_id = c_id and it_id = item_id;
+    else
+    insert into basket values (c_id,item_id,1,(select price from item where i_id = item_id ) ,(select count(*) from basket));
+    end if;
+    dbms_output.put_line(c_);
+END;
+/
+create or replace procedure "ADD_ITEM" (
+    sz      in  varchar2,
+    pr      in     number,
+    tp        in     varchar2)
+as
+len_exeption exception;
+begin
+    if(tp< 5) then
+        raise len_exeption;
+    else 
+        insert into item values((select count(*)from item)+1,sz,pr,tp);
+    end if;
+EXCEPTION 
+   when len_exeption then
+      dbms_output.put_line('type must be more than 5 characters'); 
+   when others then 
+      dbms_output.put_line('Error!');  
+end "ADD_ITEM";
+/
+create or replace procedure "BALANCE_UP" (
+    cardi      in out number,
+    v      in     number )
+as
+begin
+    update cards set summ = summ + v where card_id = cardi;
+end "BALANCE_UP";
+/
+create or replace PROCEDURE ordering(cust_id in number) AS
+amount_ number;
+sum_ number;
+not_eng_money EXCEPTION; 
+
+BEGIN
+
+sum_ := GET_CARD_SUM(cust_id);
+select sum(summ) into amount_ from basket where cl_id  = cust_id group by cl_id;
+if(amount_ > sum_) then 
+    RAISE not_eng_money;  
+    rollback;
+else 
+    insert into order_ values('card',(select count(*)from order_),amount_,cust_id,SYSDATE);
+    dbms_output.put_line('item count : '||counter(cust_id));
+end if;
+EXCEPTION
+  WHEN not_eng_money THEN 
+    dbms_output.put_line('Not enough money');
+    when others then 
+      dbms_output.put_line('Error!');  
+end;
+/
+create or replace procedure "SALE" (
+    prsnt      in  number,
+    typ      in     varchar)
+as
+begin
+    update item i set price = price - (price/prsnt) where i_type = typ;
+    DBMS_OUTPUT.PUT_LINE('the price of '||SQL%ROWCOUNT ||' items has been changed by '||prsnt||' percent');
+end "SALE";
+/

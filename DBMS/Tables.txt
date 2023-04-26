@@ -1,0 +1,88 @@
+CREATE TABLE Customer (
+    ID number ,
+    First_name varchar(50),
+    Last_name varchar(50),
+    login varchar(50)
+    password varchar(50),
+    card number,
+    add_Id number,
+    PRIMARY KEY (id),
+    FOREIGN KEY (card) REFERENCES Cards(card_id)
+    FOREIGN KEY add_Id REFERENCES Addresses(add_Id)	
+);
+
+create table addresses (
+    ad_id number,
+    country varchar(50),
+    city varchar(50),
+    street varchar(50),
+    house varchar(50),
+    primary key (ad_id)
+)
+CREATE TABLE Cards (
+    card_id number,
+    name_of_bank varchar(50),
+    v_date date,
+    cvc number,
+    First_name varchar(50),
+    Last_name varchar(50),
+    PRIMARY KEY (card_id)
+);
+CREATE TABLE Item (
+    i_id number,
+    i_size varchar(10),
+    price number,
+    I_type varchar(50),
+    PRIMARY KEY (i_id)
+   
+);
+
+CREATE TABLE Basket (
+    s_id number,
+    cl_id number,
+    it_id number,
+    price number,
+    primary key (select_id),
+    FOREIGN KEY (cl_id) REFERENCES Customer(ID),
+    FOREIGN KEY (it_id) REFERENCES item(i_id)
+
+);
+CREATE TABLE SHIPPING (
+    shipping_id number,
+    s_type varchar(50),
+    address varchar(180),
+    deliver_id number,
+    order_id number,
+    PRIMARY KEY (shipping_id)
+    FOREIGN KEY order_id REFERENCES ORder_order_id 
+);
+
+CREATE TABLE ORDER_ (
+    payment_type varchar(50),
+    order_id number,
+    amount number,
+    cl_id number,
+    order_date date,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (cl_id) REFERENCES Customer(id)
+);
+CREATE TABLE REVIEWS (
+    cl_id number,
+    rew_id number,
+    rew number,
+    it_id number,
+    shipping_id number,
+    PRIMARY KEY (rew_id),
+    FOREIGN KEY (cl_id) REFERENCES Customer (id),
+    FOREIGN KEY (it_id) REFERENCES Item(i_id)
+);
+
+amount number :=(select sum(price) from bakset group by cl_id);
+
+
+
+
+
+
+
+
