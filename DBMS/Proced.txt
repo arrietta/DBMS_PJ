@@ -15,7 +15,7 @@ BEGIN
     if(c_>0) then
     update basket set count_ = count_+1 , summ = summ + (select price from item where i_id = item_id )  where cl_id = c_id and it_id = item_id;
     else
-    insert into basket values (c_id,item_id,1,(select price from item where i_id = item_id ) ,(select count(*) from basket));
+    insert into basket values (c_id,item_id,1,(select price from item where i_id = item_id ) ,BASKET_COUNT);
     end if;
     dbms_output.put_line(c_);
 END;

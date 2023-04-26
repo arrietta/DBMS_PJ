@@ -21,3 +21,13 @@ begin
     return c_sum;
 end "GET_CARD_SUM";
 /
+
+create or replace function "BASKET_COUNT"
+return number
+as
+row_ number;
+begin
+    select count(*) into row_ from basket;
+    return row_ +1;
+end "BASKET_COUNT";
+/
