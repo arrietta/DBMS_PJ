@@ -79,3 +79,32 @@ begin
     DBMS_OUTPUT.PUT_LINE('the price of '||SQL%ROWCOUNT ||' items has been changed by '||prsnt||' percent');
 end "SALE";
 /
+CREATE OR REPLACE PROCEDURE reg(
+    first_name IN varchar2,
+    last_name IN varchar2,
+    login IN varchar2,
+    pasword IN varchar2
+    
+) 
+AS
+leth exception;
+BEGIN
+    
+    IF LENGTH(first_name) < 5 THEN
+        raise leth;
+    elsif LENGTH(last_name) < 5 THEN
+        raise leth;
+    elsif LENGTH(login) < 5 THEN
+        raise leth;
+    elsif LENGTH(pasword) < 5 THEN
+        raise leth;
+    else 
+    insert into customer values((select count(*)from customer),first_name,last_name,login,pasword,null,null);
+    END IF;
+    
+EXCEPTION 
+   when  leth then
+      dbms_output.put_line('there is must be more than 5 characters'); 
+   when others then 
+      dbms_output.put_line('Error!');  
+END;
